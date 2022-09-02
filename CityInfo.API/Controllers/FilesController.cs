@@ -26,7 +26,7 @@ namespace CityInfo.API.Controllers
                 return NotFound();
             }
             
-            if(_fileExtensionContentTypeProvider.TryGetContentType(pathToFile, out var contentType))
+            if(!_fileExtensionContentTypeProvider.TryGetContentType(pathToFile, out var contentType))
             {
                 contentType = "application/octet-stream";
             }
