@@ -1,5 +1,4 @@
 ﻿using CityInfo.API.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,15 +19,25 @@ namespace CityInfo.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<PointOfInterestDto>> GetPointsOfInterest(int cityId)
         {
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
-
-            if (city == null)
+            try
             {
-                _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest.");
-                return NotFound();
-            }
+                throw new Exception("Exception sample.");
 
-            return Ok(city.PointsOfInterest);
+                var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+
+                if (city == null)
+                {
+                    _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest.");
+                    return NotFound();
+                }
+
+                return Ok(city.PointsOfInterest);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical($"Exception while getting points of interest for city with id {cityId}.", ex);
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
         }
 
         [HttpGet("{pointofinterestid}", Name = "GetPointOfInterest")]
@@ -141,7 +150,7 @@ namespace CityInfo.API.Controllers
         }
 
         [HttpDelete("{pointOfInterestId}")]
-         public ActionResult DeletePointOfInterest(int cityId, int pointOfInterestId)
+        public ActionResult DeletePointOfInterest(int cityId, int pointOfInterestId)
         {
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
 
