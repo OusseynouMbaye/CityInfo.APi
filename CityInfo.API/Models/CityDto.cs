@@ -8,7 +8,8 @@
 
         public string? Description { get; set; }
 
-        public int NumberOfPointsInterest { 
+        public int NumberOfPointsInterest
+        {
             get { 
                 return PointsOfInterest.Count;
             } 

@@ -1,0 +1,5 @@
+﻿ORM
+
+code first creer la base de donnees  a partir de notre code
+
+database-first base de donnee d'abord
