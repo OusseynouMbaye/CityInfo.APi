@@ -1,0 +1,10 @@
+﻿ORM
+
+code first creer la base de donnees  a partir de notre code
+
+database-first base de donnee d'abord
+
+
+creation d'un connexion for production
+variable name : ConnectionStrings:CityInfoDBConnectionString
+variable value : Server=myproductionserver;Database=CityInfoDB;UserId=ARealUsername,Password=ARealPassword
