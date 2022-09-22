@@ -28,6 +28,10 @@ namespace CityInfo.API.Services
 
             return await _context.Cities.Where(citie => citie.Id == cityId).FirstOrDefaultAsync();
         }
+        public async Task<bool> CityExistsAsync(int cityId)
+        {
+            return await _context.Cities.AnyAsync(city => city.Id == cityId); 
+        }
 
         public async Task<IEnumerable<PointOfInterest>> GetPointsOfInterestForCityAsync(int cityId)
         {
