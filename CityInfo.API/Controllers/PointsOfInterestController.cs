@@ -139,27 +139,30 @@ namespace CityInfo.API.Controllers
 
             return NoContent();
         }
-        /*
-                              [HttpDelete("{pointOfInterestId}")]
-                              public ActionResult DeletePointOfInterest(int cityId, int pointOfInterestId)
-                              {
-                                  var city = _citiesDataStore.Cities.FirstOrDefault(c => c.Id == cityId);
-                                  if (city == null)
-                                  {
-                                      return NotFound();
-                                  }
 
-                                  var pointOfInterestFromStore = city.PointsOfInterest.FirstOrDefault(c => c.Id == pointOfInterestId);
-                                  if (pointOfInterestFromStore == null)
-                                  {
-                                      return NotFound();
-                                  }
+        [HttpDelete("{pointOfInterestId}")]
+        public async Task<ActionResult> DeletePointOfInterest(int cityId, int pointOfInterestId)
+        {
+            if (!await _cityInfoRepository.CityExistsAsync(cityId))
+            {
+                return NotFound();
+            }
 
-                                  city.PointsOfInterest.Remove(pointOfInterestFromStore);
-                                  _mailService.send("Point of interest deleted.",
-                                      $"Point of interest {pointOfInterestFromStore.Name} with id {pointOfInterestFromStore.Id} was deleted.");
-                                  return NoContent();
-                              }
-                          */
+            var pointOfInterestEntity = await _cityInfoRepository
+                .GetPointOfInterestForCityAsync(cityId, pointOfInterestId);
+            if (pointOfInterestEntity == null)
+            {
+                return NotFound();
+            }
+
+
+            _cityInfoRepository.DeletePointOfInterest(pointOfInterestEntity);
+            await _cityInfoRepository.SaveChangesAsync();
+
+            _mailService.send("Point of interest deleted.",
+                $"Point of interest {pointOfInterestEntity.Name} with id {pointOfInterestEntity.Id} was deleted.");
+            return NoContent();
+        }
+
     }
 }
